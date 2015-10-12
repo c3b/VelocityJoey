@@ -16,7 +16,7 @@ public class Tube {
     //vertical gap
     private static final int TUBE_GAP =80;
     private static final int LOWEST_OPENING = 80;
-    private Texture topTube, topTubeNight, tubeBlackNWhite, tubeSpace;
+    private Texture topTube, topTubeNight, tubeBlackNWhite, tubeSpace, tubeTron;
     private Vector2 posTopTube, posBotTube, posTopTubeDecale;
     private Rectangle boundsTop, boundsBot;
     private Random rand;
@@ -27,6 +27,7 @@ public class Tube {
         topTubeNight = new Texture("toptubenight.png");
         tubeBlackNWhite = new Texture("tube_blackwhite.png");
         tubeSpace = new Texture("tubespace.png");
+        tubeTron = new Texture("tubetron.png");
 
         rand = new Random();
 
@@ -48,9 +49,15 @@ public class Tube {
         return tubeBlackNWhite;
     }
 
+    public Texture getTubeTron() {
+        return tubeTron;
+    }
+
     public Texture getTubeSpace() {
         return tubeSpace;
     }
+
+
 
     public Vector2 getPosTopTube() {
         return posTopTube;
@@ -79,6 +86,8 @@ public class Tube {
 
         topTubeNight.dispose();
         tubeBlackNWhite.dispose();
+        tubeTron.dispose();
         tubeSpace.dispose();
+
     }
 }
