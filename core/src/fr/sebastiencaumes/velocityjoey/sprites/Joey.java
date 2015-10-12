@@ -19,7 +19,7 @@ public class Joey {
     private Rectangle bounds;
     private Animation birdAnimation;
     private Sound flap;
-
+    private static boolean firstJump;
 
     public TextureRegion getBird() {
         return birdAnimation.getFrame();
@@ -30,28 +30,32 @@ public class Joey {
     }
 
     public Joey(int x, int y){
+        firstJump = false;
         flap = Gdx.audio.newSound(Gdx.files.internal("sfx_jump.ogg"));
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
         texture = new Texture("bird2.png");
         movement =70;
-
+;
         birdAnimation = new Animation(new TextureRegion(texture), 5, 0.5f);
         bounds = new Rectangle(x, y, texture.getWidth() / 5, texture.getHeight());
     }
 
     public void update(float dt){
         birdAnimation.update(dt);
-        if(position.y > 0)
-            velocity.add(0, GRAVITY, 0);
 
-        velocity.scl(dt);
-        position.add(movement * dt, velocity.y, 0);
-        if(position.y < 0)
-            position.y = 0;
+        if(firstJump) {
+            if (position.y > 0)
+                velocity.add(0, GRAVITY, 0);
+        }
+            velocity.scl(dt);
+            position.add(movement * dt, velocity.y, 0);
+            if (position.y < 0)
+                position.y = 0;
 
 
-        velocity.scl(1/dt);
+            velocity.scl(1 / dt);
+
         bounds.setPosition(position.x, position.y);
     }
 
@@ -59,7 +63,8 @@ public class Joey {
     public void jump(){
         flap.play(0.3f);
         velocity.y = 250;
-
+        if(firstJump == false)
+            firstJump = true;
 
         if(movement < 90){
             movement = movement +4f;
@@ -76,10 +81,14 @@ public class Joey {
         if (movement >= 120 && movement <130){
             movement = movement +0.2f;
         }
-        if (movement >= 130 && movement <140){
+        if (movement >= 130 && movement <150){
             movement = movement +0.1f;
         }
 
+    }
+
+    public boolean isFirstJump() {
+        return firstJump;
     }
 
     public Rectangle getBounds(){
