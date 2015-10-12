@@ -50,10 +50,10 @@ public class MenuState extends State {
             gsm.set(new PlayState(gsm));
 
 
-            //si bottom left touch
+            //if middle touch
         }else
 
-        if (Gdx.input.getY() > Gdx.graphics.getHeight()/1.5 && Gdx.input.getX() < Gdx.graphics.getWidth() /2 && Gdx.input.justTouched()){
+        if (Gdx.input.getY() > Gdx.graphics.getHeight()/2 && Gdx.input.getY() < Gdx.graphics.getHeight()/1.3 && Gdx.input.justTouched()){
 
             //TODO Make music stop
             if(musicOn == true){
@@ -66,8 +66,8 @@ public class MenuState extends State {
 
         }
 
-        //if bottom right touch
-        if (Gdx.input.getY() > Gdx.graphics.getHeight()/1.5 && Gdx.input.getX() > Gdx.graphics.getWidth() /2 && Gdx.input.justTouched()){
+        //if bottom  touch
+        if (Gdx.input.getY() > Gdx.graphics.getHeight()/1.3 && Gdx.input.getY() < Gdx.graphics.getHeight()/1.2  && Gdx.input.justTouched()){
 
             //exit app
             Gdx.app.exit();
@@ -88,14 +88,14 @@ public class MenuState extends State {
 
         sb.draw(background, 0, 0, VelocityJoey.WIDTH, VelocityJoey.HEIGHT);
         //sb.draw(background, 0, 0);//for android
-        sb.draw(mainTitle, cam.position.x - mainTitle.getWidth() / 2, cam.position.y + 140 );
-        sb.draw(exitBtn, cam.position.x +5 , cam.position.y - mainTitle.getHeight());
+        sb.draw(mainTitle, cam.position.x - mainTitle.getWidth() / 2, cam.position.y + 180 );
+        sb.draw(exitBtn, cam.position.x -exitBtn.getWidth()/2 , cam.position.y - mainTitle.getHeight());
         sb.draw(accelTxt, cam.position.x - accelTxt.getWidth()/2, cam.position.y -80);
 
     if(musicOn){
-        sb.draw(musicBtn, cam.position.x - musicBtn.getWidth() -5, cam.position.y - mainTitle.getHeight());
+        sb.draw(musicBtn, cam.position.x - musicBtn.getWidth()/2 , cam.position.y - mainTitle.getHeight()+180);
     }else {
-        sb.draw(musicBtnOff, cam.position.x - musicBtn.getWidth() - 5, cam.position.y - mainTitle.getHeight());
+        sb.draw(musicBtnOff, cam.position.x - musicBtn.getWidth()/2 , cam.position.y - mainTitle.getHeight()+180);
 
     }
         sb.end();

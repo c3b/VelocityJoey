@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 
 import fr.sebastiencaumes.velocityjoey.VelocityJoey;
 import fr.sebastiencaumes.velocityjoey.sprites.Joey;
+import fr.sebastiencaumes.velocityjoey.sprites.Tube;
 
 /**
  * Created by sebastien on 27/09/15.
@@ -31,7 +32,7 @@ public class PlayState extends State{
     private static final int GROUND_OFFSET = 0;
     private boolean gameOver = false; //seb
     private Joey joey;
-    private Array<fr.sebastiencaumes.velocityjoey.sprites.Tube> tubes;
+    private Array<Tube> tubes;
     private Vector2 groundPos1, groundPos2;
     private boolean repo;
     private int score;
@@ -48,7 +49,7 @@ public class PlayState extends State{
     private Sound fallGround;
     private Texture bg;
     private Texture ground;
-    private Sound theGameIsOver;
+    //private Sound theGameIsOver;
     private FreeTypeFontGenerator generator;
     private FreeTypeFontParameter parameter;
 
@@ -75,7 +76,7 @@ public class PlayState extends State{
         crashSound = Gdx.audio.newSound(Gdx.files.internal("metalhit.ogg"));
         alertAir = Gdx.audio.newSound(Gdx.files.internal("fx_air.ogg"));
         fallGround = Gdx.audio.newSound(Gdx.files.internal("fx_sol.ogg"));
-        theGameIsOver = Gdx.audio.newSound(Gdx.files.internal("gameover.ogg"));
+        //theGameIsOver = Gdx.audio.newSound(Gdx.files.internal("gameover.ogg"));
         //theGameIsOver.stop();
 
         playrScoreFont = generator.generateFont(parameter);
@@ -83,7 +84,7 @@ public class PlayState extends State{
         pref = Gdx.app.getPreferences("mypreferences");
 
 
-        joey = new Joey(birdXSpacing, 220);
+        joey = new Joey(birdXSpacing, 130);
         cam.setToOrtho(false, VelocityJoey.WIDTH / 4, VelocityJoey.HEIGHT / 4);
         score = 0;
         playerScore = "0";
@@ -94,12 +95,12 @@ public class PlayState extends State{
         //playrScoreMaxFont = new BitmapFont();
 
         repo = false;
-        tubes = new Array<fr.sebastiencaumes.velocityjoey.sprites.Tube>();
+        tubes = new Array<Tube>();
 
         if (decorNumber == 1) {
 
             for (int i = 1; i <= TUBE_COUNT; ++i) {
-                tubes.add(new fr.sebastiencaumes.velocityjoey.sprites.Tube(i * (TUBE_SPACING + fr.sebastiencaumes.velocityjoey.sprites.Tube.TUBE_WIDTH)));
+                tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
             }
             decorNumber =2;
         }
@@ -109,7 +110,7 @@ public class PlayState extends State{
             bg = new Texture("bgnight.png");
             ground = new Texture("groundnight.png");
             for (int i = 1; i <= TUBE_COUNT; ++i) {
-                tubes.add(new fr.sebastiencaumes.velocityjoey.sprites.Tube(i * (TUBE_SPACING + fr.sebastiencaumes.velocityjoey.sprites.Tube.TUBE_WIDTH)));
+                tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
             }
             decorNumber =3;
         }
@@ -119,20 +120,33 @@ public class PlayState extends State{
             bg = new Texture("bg_blackwhite.png");
             ground = new Texture("ground_blackwhite.png");
             for (int i = 1; i <= TUBE_COUNT; ++i) {
-                tubes.add(new fr.sebastiencaumes.velocityjoey.sprites.Tube(i * (TUBE_SPACING + fr.sebastiencaumes.velocityjoey.sprites.Tube.TUBE_WIDTH)));
+                tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
             }
             decorNumber =4;
         }
 
         else if (decorNumber == 4) {
+            bg = new Texture("fondtron.png");
+            ground = new Texture("groundtron.png");
+            for (int i = 1; i <= TUBE_COUNT; ++i) {
+                tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
+            }
+
+            decorNumber =5;
+        }
+
+        else if (decorNumber == 5) {
             bg = new Texture("bgspace.png");
             ground = new Texture("groundspace.png");
             for (int i = 1; i <= TUBE_COUNT; ++i) {
-                tubes.add(new fr.sebastiencaumes.velocityjoey.sprites.Tube(i * (TUBE_SPACING + fr.sebastiencaumes.velocityjoey.sprites.Tube.TUBE_WIDTH)));
+                tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
             }
 
             decorNumber =1;
         }
+
+
+
 
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 4, GROUND_OFFSET);
         groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 4) + ground.getWidth(), GROUND_OFFSET);
@@ -168,15 +182,15 @@ public class PlayState extends State{
         joey.update(dt);
         cam.position.x = joey.getPosition().x + 60;
 
-        for (fr.sebastiencaumes.velocityjoey.sprites.Tube tube : tubes) {
+        for (Tube tube : tubes) {
             if (cam.position.x - (cam.viewportWidth / 2) > tube.getPosTopTube().x + tube.getTopTube().getWidth()) {
-                tube.reposition(tube.getPosTopTube().x + (fr.sebastiencaumes.velocityjoey.sprites.Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT);
+                tube.reposition(tube.getPosTopTube().x + (Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT);
                 scoreUp();
             }
             if (tube.collides(joey.getBounds())) {
 
                 crashSound.play(0.8f);
-                theGameIsOver.play();
+                //theGameIsOver.play(0.4f);
                 music.stop();
                 gsm.set(new GameOverState(gsm)); // seb
                 dispose();
@@ -186,10 +200,10 @@ public class PlayState extends State{
         }
 
         //if touch ground
-        if (joey.getPosition().y <= ground.getHeight() + GROUND_OFFSET) {
+        if (joey.getPosition().y <= ground.getHeight() + GROUND_OFFSET -5) {
 
             fallGround.play();
-            theGameIsOver.play();
+            //theGameIsOver.play(0.4f);
             music.stop();
             gsm.set(new GameOverState(gsm)); // seb
 
@@ -200,14 +214,14 @@ public class PlayState extends State{
 
         //if too high in the sky
     if((joey.getPosition().y +10) >= VelocityJoey.HEIGHT / 4) {
-        alertAir.play(0.05f);
+        alertAir.play(0.04f);
         if(joey.getPosition().y + 10 < VelocityJoey.HEIGHT /4){
             alertAir.stop();
         }
 
         if ((joey.getPosition().y -20) >= VelocityJoey.HEIGHT / 4) {
 
-            theGameIsOver.play();
+            //theGameIsOver.play(0.5f);
             music.stop();
             gsm.set(new GameOverState(gsm)); // seb
 
@@ -230,11 +244,11 @@ public class PlayState extends State{
         playrScoreFont.setColor(Color.DARK_GRAY);
 
         playrScoreFont.draw(sb, playerScore, cam.position.x - (cam.viewportWidth
-                / 2) + 15, cam.position.y - (cam.viewportHeight / 2) + 300);
+                / 2) + 5, cam.position.y - (cam.viewportHeight / 2) + 300);
         playrScoreMaxFont.setColor(Color.GOLDENROD);
-        playrScoreMaxFont.draw(sb, playerScoreMAx, cam.position.x - (cam.viewportWidth / 2) +105, cam.position.y - (cam.viewportHeight / 2) + 300);
+        playrScoreMaxFont.draw(sb, playerScoreMAx, cam.position.x - (cam.viewportWidth / 2) +95, cam.position.y - (cam.viewportHeight / 2) + 300);
 
-        for (fr.sebastiencaumes.velocityjoey.sprites.Tube tube : tubes) {
+        for (Tube tube : tubes) {
             if (decorNumber == 2) {
                 sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
                 sb.draw(tube.getTopTube(), tube.getPosBotTube().x, tube.getPosBotTube().y);
@@ -248,6 +262,11 @@ public class PlayState extends State{
             }else if (decorNumber ==4){
                 sb.draw(tube.getTubeBlackNWhite(), tube.getPosTopTube().x, tube.getPosTopTube().y);
                 sb.draw(tube.getTubeBlackNWhite(), tube.getPosBotTube().x, tube.getPosBotTube().y);
+            }
+
+            else if (decorNumber ==5){
+                sb.draw(tube.getTubeTron(), tube.getPosTopTube().x, tube.getPosTopTube().y);
+                sb.draw(tube.getTubeTron(), tube.getPosBotTube().x, tube.getPosBotTube().y);
             }
 
             else if(decorNumber == 1){
@@ -274,7 +293,7 @@ public class PlayState extends State{
         fallGround.dispose();
         playrScoreFont.dispose();
         playrScoreMaxFont.dispose();
-        theGameIsOver.dispose();
+        //theGameIsOver.dispose();
         joey.dispose();
     }
 

@@ -33,7 +33,7 @@ public class GameOverState extends State {
         backToMenu = new Texture("backmenu.png");
         generator = new FreeTypeFontGenerator(Gdx.files.internal("inversion.otf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 46;
+        parameter.size = 76;
         playrScoreMaxFont = generator.generateFont(parameter);
         playerScoreMAx = "best "+ PlayState.pref.getString("best", "0");
         playrScoreMaxFont.setColor(Color.GOLDENROD);
@@ -73,10 +73,10 @@ public class GameOverState extends State {
         sb.setProjectionMatrix(cam.combined); // for android
         sb.begin();
         sb.draw(background, 0, 0, VelocityJoey.WIDTH, VelocityJoey.HEIGHT);
-        sb.draw(gameIsOver, cam.position.x - gameIsOver.getWidth() /2, cam.position.y +250) ;
+        sb.draw(gameIsOver, cam.position.x - gameIsOver.getWidth() /2, cam.position.y +210) ;
         sb.draw(playAgain, cam.position.x -5 , cam.position.y - gameIsOver.getHeight() + 300) ;
         sb.draw(backToMenu, cam.position.x - backToMenu.getWidth() -5 , cam.position.y - gameIsOver.getHeight() + 300);
-        playrScoreMaxFont.draw(sb, playerScoreMAx, cam.position.x - 300 , cam.position.y +560);
+        playrScoreMaxFont.draw(sb, playerScoreMAx, cam.position.x - 310 , cam.position.y +560);
         sb.end();
     }
 
@@ -87,6 +87,8 @@ public class GameOverState extends State {
         gameIsOver.dispose();
         playAgain.dispose();
         backToMenu.dispose();
+        playrScoreMaxFont.dispose();
+
 
     }
 
